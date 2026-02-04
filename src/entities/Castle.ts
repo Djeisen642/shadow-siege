@@ -1,5 +1,6 @@
 import { Entity } from './Entity';
 import type { Game } from '../engine/Game';
+import { COLORS, CASTLE_STATS } from '../engine/Constants';
 
 export class Castle extends Entity {
   health: number;
@@ -7,12 +8,12 @@ export class Castle extends Entity {
 
   constructor(game: Game, x: number, y: number) {
     super(game, x, y);
-    this.radius = 30;
-    this.health = 100;
-    this.maxHealth = 100;
-    this.color = '#fff';
+    this.radius = CASTLE_STATS.RADIUS;
+    this.health = CASTLE_STATS.HEALTH;
+    this.maxHealth = CASTLE_STATS.HEALTH;
+    this.color = COLORS.CASTLE;
     // Castle emits some light
-    this.lightRadius = 80;
+    this.lightRadius = CASTLE_STATS.LIGHT_RADIUS;
   }
 
   takeDamage(amount: number) {
@@ -29,7 +30,7 @@ export class Castle extends Entity {
 
   draw(ctx: CanvasRenderingContext2D) {
     // Draw Base
-    ctx.fillStyle = '#444';
+    ctx.fillStyle = COLORS.CASTLE_BASE;
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
     ctx.fill();
@@ -42,9 +43,9 @@ export class Castle extends Entity {
 
     // Health Bar
     const hpPct = Math.max(0, this.health / this.maxHealth);
-    ctx.fillStyle = 'red';
+    ctx.fillStyle = COLORS.HEALTH_BAR_BG;
     ctx.fillRect(this.x - 25, this.y - 40, 50, 6);
-    ctx.fillStyle = 'lime';
+    ctx.fillStyle = COLORS.HEALTH_BAR_FG;
     ctx.fillRect(this.x - 25, this.y - 40, 50 * hpPct, 6);
   }
 }

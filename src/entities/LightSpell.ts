@@ -1,6 +1,6 @@
 import { Entity } from './Entity';
 import { Game } from '../engine/Game';
-import { COLORS } from '../engine/Constants';
+import { COLORS, LIGHT_SPELL_STATS } from '../engine/Constants';
 
 export class LightSpell extends Entity {
   life: number;
@@ -8,8 +8,8 @@ export class LightSpell extends Entity {
 
   constructor(game: Game, x: number, y: number) {
     super(game, x, y);
-    this.life = 10.0; // Lasts 10 seconds
-    this.maxLife = 10.0;
+    this.life = LIGHT_SPELL_STATS.DURATION;
+    this.maxLife = LIGHT_SPELL_STATS.DURATION;
     this.lightRadius = 0; // Starts at 0, grows
     this.color = COLORS.LIGHT_SPELL;
   }
@@ -18,11 +18,11 @@ export class LightSpell extends Entity {
     this.life -= deltaTime;
     if (this.life <= 0) {
       this.markedForDeletion = true;
+      return;
     }
 
     // Animation: Grow fast, stay, then shrink
-    // Simple: Grow to max 150
-    const targetRadius = 150;
+    const targetRadius = LIGHT_SPELL_STATS.MAX_RADIUS;
 
     // Fade out logic
     if (this.life < 5.0) {

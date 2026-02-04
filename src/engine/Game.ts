@@ -6,7 +6,7 @@ import { Tower } from '../entities/Tower';
 import { ResourceNode } from '../entities/ResourceNode';
 import { Castle } from '../entities/Castle';
 import { Entity } from '../entities/Entity';
-import { COSTS, MANA_REGEN, SPAWN_RATES, type ActionMode } from './Constants';
+import { COSTS, GAME_CONFIG, MANA_REGEN, SPAWN_RATES, type ActionMode } from './Constants';
 
 interface GameEffect {
   type: string;

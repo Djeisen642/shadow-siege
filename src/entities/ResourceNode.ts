@@ -1,5 +1,6 @@
 import { Entity } from './Entity';
 import type { Game } from '../engine/Game';
+import { COLORS, RESOURCE_STATS } from '../engine/Constants';
 
 export class ResourceNode extends Entity {
   value: number;
@@ -10,9 +11,9 @@ export class ResourceNode extends Entity {
 
   constructor(game: Game, x: number, y: number) {
     super(game, x, y);
-    this.radius = 12;
-    this.value = 25; // Gold
-    this.color = '#d4af37';
+    this.radius = RESOURCE_STATS.RADIUS;
+    this.value = RESOURCE_STATS.VALUE; // Gold
+    this.color = COLORS.RESOURCE_NODE;
     this.type = 'GOLD';
 
     // Animation State
@@ -44,21 +45,22 @@ export class ResourceNode extends Entity {
 
   draw(ctx: CanvasRenderingContext2D) {
     if (this.isCollected) {
-      ctx.globalAlpha = Math.max(0, this.animAlpha);
-      ctx.fillStyle = this.color;
-      ctx.beginPath();
-      ctx.moveTo(this.x, this.y - this.radius + this.animY);
-      ctx.lineTo(this.x + this.radius, this.y + this.animY);
-      ctx.lineTo(this.x, this.y + this.radius + this.animY);
-      ctx.lineTo(this.x - this.radius, this.y + this.animY);
-      ctx.fill();
-      ctx.globalAlpha = 1.0;
+      if (this.animAlpha > 0) {
+        ctx.globalAlpha = Math.max(0, this.animAlpha);
+        ctx.fillStyle = COLORS.RESOURCE_FLOAT; // Brighter gold
+        ctx.beginPath();
+        // Star shape or diamond
+        ctx.moveTo(this.x, this.y - this.radius + this.animY);
+        ctx.lineTo(this.x + this.radius, this.y + this.animY);
+        ctx.lineTo(this.x, this.y + this.radius + this.animY);
+        ctx.lineTo(this.x - this.radius, this.y + this.animY);
+        ctx.fill();
+        ctx.globalAlpha = 1.0;
+      }
     } else if (this.game.isPointLit(this.x, this.y)) {
-      // Should technically auto-collect instantly if lit,
-      // so this frame might be skipped logic-wise,
-      // but good fallback.
       ctx.fillStyle = this.color;
       ctx.beginPath();
+      // Diamond shape
       ctx.moveTo(this.x, this.y - this.radius);
       ctx.lineTo(this.x + this.radius, this.y);
       ctx.lineTo(this.x, this.y + this.radius);
@@ -71,7 +73,7 @@ export class ResourceNode extends Entity {
     if (this.isCollected) {
       ctx.save();
       ctx.globalAlpha = Math.max(0, this.animAlpha);
-      ctx.fillStyle = '#ffd700';
+      ctx.fillStyle = COLORS.RESOURCE_FLOAT;
       ctx.font = 'bold 16px sans-serif';
       ctx.fillText(`+${this.value}`, this.x - 10, this.y - 20 + this.animY);
       ctx.restore();

@@ -1,5 +1,6 @@
 import { Entity } from './Entity';
 import type { Game } from '../engine/Game';
+import { COLORS, ENEMY_STATS } from '../engine/Constants';
 
 export class Enemy extends Entity {
   speed: number;
@@ -9,11 +10,12 @@ export class Enemy extends Entity {
 
   constructor(game: Game, x: number, y: number) {
     super(game, x, y);
-    this.speed = 30; // pixels per second
-    this.health = 30;
-    this.value = 10; // Gold value
-    this.radius = 8;
-    this.color = '#f00';
+    this.speed = ENEMY_STATS.SPEED;
+    this.radius = ENEMY_STATS.RADIUS;
+    this.health = ENEMY_STATS.HEALTH;
+    this.value = ENEMY_STATS.VALUE;
+    this.color = COLORS.ENEMY;
+    // Assuming base is center for now, or use game.castle coords if available in constructor
     this.targetBase = { x: game.renderer.width / 2, y: game.renderer.height / 2 };
   }
 
@@ -45,10 +47,6 @@ export class Enemy extends Entity {
     // Only draw if lit!
     const isLit = this.game.isPointLit(this.x, this.y);
 
-    // Debug: Draw invisible enemies as faint grey?
-    // No, for "Shadow Siege" feeling, they should be INVISIBLE if not lit.
-    // But for a web game, maybe a tiny hint or fully invisible.
-
     if (isLit) {
       ctx.fillStyle = this.color;
       ctx.beginPath();
@@ -57,11 +55,10 @@ export class Enemy extends Entity {
       ctx.fill();
 
       // Health bar
-      ctx.fillStyle = 'red';
+      ctx.fillStyle = COLORS.HEALTH_BAR_BG;
       ctx.fillRect(this.x - 10, this.y - 15, 20, 3);
-      ctx.fillStyle = 'green';
-      ctx.fillRect(this.x - 10, this.y - 15, 20 * (this.health / 30), 3);
+      ctx.fillStyle = COLORS.HEALTH_BAR_ENEMY_FG;
+      ctx.fillRect(this.x - 10, this.y - 15, 20 * (this.health / ENEMY_STATS.HEALTH), 3);
     }
-    // Else: completely invisible in the dark overlay
   }
 }
