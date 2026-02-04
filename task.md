@@ -1,0 +1,30 @@
+# Shadow Siege - Task List
+
+- [/] Project Setup
+    - [x] Initialize Vite project with Vanilla JS
+    - [x] Setup basic folder structure (src, assets, styles)
+    - [x] Create basic HTML/CSS shell
+- [/] Core Engine Implementation
+    - [/] Game Loop & Canvas setup
+    - [/] Input handling (Mouse/Keyboard)
+    - [/] Grid system / Map management
+    - [/] Fog of War / Lighting system core
+- [/] Game Mechanics - Basic
+    - [x] Resource system (Auto-collect when lit)
+    - [x] Enemy spawning and pathfinding
+    - [x] Castle Entity (Player Base with Health)
+- [/] Game Mechanics - Combat
+    - [x] Light Spells (revealing enemies)
+    - [x] Defense: Close range auto-attack towers
+    - [x] Defense: Ranged towers (require light)
+    - [x] Enemy health and damage
+    - [x] Persistent Spell/Building Selection
+- [x] UI/UX
+    - [x] Resource display (Implemented in Game.js)
+    - [x] Build menu (Implemented in Game.js)
+    - [x] Game Over / Win screens (Basic Alert)
+- [x] Polish & Assets
+    - [x] "Dark and Siege" visual styling
+    - [x] Particle effects (Resource Float)
+    - [ ] Sound/Audio (Skipped)
+    - [x] Cleanup (Removed empty folders and unused files)

@@ -1,0 +1,83 @@
+:root {
+  --bg-color: #1a1a1a;
+  --ui-bg: rgba(0, 0, 0, 0.7);
+  --text-color: #eee;
+  --accent-color: #ffd700;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg-color);
+  font-family: 'Inter', sans-serif;
+  color: var(--text-color);
+  user-select: none;
+}
+
+#app {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+canvas {
+  display: block;
+}
+
+#ui-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Let clicks pass through to canvas */
+}
+
+#resource-display {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: var(--ui-bg);
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border: 1px solid #333;
+}
+
+#controls {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ui-bg);
+  padding: 10px;
+  border-radius: 12px;
+  display: flex;
+  gap: 10px;
+  pointer-events: auto; /* Re-enable clicks for buttons */
+}
+
+.control-btn {
+  background: #333;
+  color: #fff;
+  border: 1px solid #555;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.control-btn:hover {
+  background: #444;
+  border-color: #777;
+}
+
+.control-btn.active {
+  background: var(--accent-color);
+  color: #000;
+}

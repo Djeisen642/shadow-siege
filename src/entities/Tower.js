@@ -1,0 +1,108 @@
+import { Entity } from './Entity.js';
+
+export class Tower extends Entity {
+  constructor(game, x, y, type) {
+    super(game, x, y);
+    this.type = type; // 'MELEE' or 'RANGED'
+    this.radius = 15;
+    this.range = type === 'MELEE' ? 60 : 200;
+    this.damage = type === 'MELEE' ? 20 : 10;
+    this.cooldown = 0;
+    this.fireRate = type === 'MELEE' ? 0.5 : 1.5; // Seconds between shots
+
+    this.color = type === 'MELEE' ? '#44f' : '#4f4';
+
+    // Ranged towers have a small light radius themselves?
+    // Let's say yes, they emit a weak light.
+    this.lightRadius = 40;
+  }
+
+  update(deltaTime) {
+    this.cooldown -= deltaTime;
+
+    if (this.cooldown <= 0) {
+      // Find target
+      const target = this.findTarget();
+      if (target) {
+        this.fire(target);
+        this.cooldown = this.fireRate;
+      }
+    }
+  }
+
+  findTarget() {
+    // Brute force search (optimize with spatial hash later if needed)
+    let bestDist = this.range * this.range;
+    let bestTarget = null;
+
+    for (const entity of this.game.entities) {
+      // Check if it's an enemy (duck typing or check constructor name)
+      if (entity.constructor.name !== 'Enemy') continue;
+      if (entity.markedForDeletion) continue;
+
+      const dx = entity.x - this.x;
+      const dy = entity.y - this.y;
+      const distSq = dx * dx + dy * dy;
+
+      if (distSq <= this.range * this.range) {
+        // VISIBILITY CHECK
+        // Melee: Can attack in dark? Yes (as per plan)
+        // Ranged: Can ONLY attack if target is Lit
+        if (this.type === 'RANGED') {
+          if (!this.game.isPointLit(entity.x, entity.y)) {
+            continue; // Can't see it!
+          }
+        }
+
+        if (distSq < bestDist) {
+          bestDist = distSq;
+          bestTarget = entity;
+        }
+      }
+    }
+    return bestTarget;
+  }
+
+  fire(target) {
+    // Instant hit for melee, Projectile for Ranged?
+    // Simplified: Instant hit for now, draw a line.
+    target.health -= this.damage;
+
+    // Visual effect
+    this.game.effects.push({
+      type: 'line',
+      sx: this.x, sy: this.y,
+      ex: target.x, ey: target.y,
+      color: this.type === 'MELEE' ? 'cyan' : 'yellow',
+      life: 0.1
+    });
+  }
+
+  draw(ctx) {
+    ctx.fillStyle = this.color;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Draw Light Radius (if any)
+    if (this.lightRadius > 0) {
+      ctx.strokeStyle = 'rgba(255, 255, 200, 0.1)';
+      ctx.setLineDash([5, 5]);
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.lightRadius, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+  }
+
+  drawOverlay(ctx) {
+    // Range Ring - visible on top of darkness
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)'; // Brighter
+    ctx.lineWidth = 2; // Thicker
+    ctx.setLineDash([10, 10]); // Dashed
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.range, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+}
