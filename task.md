@@ -30,3 +30,10 @@
     - [x] Cleanup (Removed empty folders and unused files)
 - [x] Refactoring
     - [x] Migrate to TypeScript
+    - [x] Migrate to Bun
+- [x] Polish
+    - [x] Light Spell Fading Effect
+- [x] Code Quality
+    - [x] Unused code removal
+    - [x] Setup ESLint & Prettier
+    - [x] Fix Lint Errors

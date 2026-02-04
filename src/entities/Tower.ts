@@ -81,10 +81,12 @@ export class Tower extends Entity {
     // Visual effect
     this.game.effects.push({
       type: 'line',
-      sx: this.x, sy: this.y,
-      ex: target.x, ey: target.y,
+      sx: this.x,
+      sy: this.y,
+      ex: target.x,
+      ey: target.y,
       color: this.type === 'MELEE' ? 'cyan' : 'yellow',
-      life: 0.1
+      life: 0.1,
     });
   }
 

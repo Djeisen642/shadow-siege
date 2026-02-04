@@ -2,7 +2,7 @@ export class Input {
   canvas: HTMLCanvasElement;
   mouse: { x: number; y: number };
   isMouseDown: boolean;
-  listeners: Function[];
+  listeners: Array<(type: string, data: any) => void>;
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
@@ -14,8 +14,8 @@ export class Input {
     this.canvas.addEventListener('mousedown', (e) => this.onMouseDown(e));
     this.canvas.addEventListener('mouseup', (e) => this.onMouseUp(e));
     this.canvas.addEventListener('contextmenu', (e) => {
-        e.preventDefault();
-        this.listeners.forEach(fn => fn('contextmenu', this.getMousePos(e)));
+      e.preventDefault();
+      this.listeners.forEach((fn) => fn('contextmenu', this.getMousePos(e)));
     });
   }
 
@@ -23,7 +23,7 @@ export class Input {
     const rect = this.canvas.getBoundingClientRect();
     return {
       x: evt.clientX - rect.left,
-      y: evt.clientY - rect.top
+      y: evt.clientY - rect.top,
     };
   }
 
@@ -35,7 +35,7 @@ export class Input {
     this.isMouseDown = true;
     this.mouse = this.getMousePos(e);
     // Notify listeners
-    this.listeners.forEach(fn => fn('mousedown', this.mouse));
+    this.listeners.forEach((fn) => fn('mousedown', this.mouse));
   }
 
   onMouseUp(_e: MouseEvent) {

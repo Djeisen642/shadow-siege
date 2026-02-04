@@ -19,6 +19,14 @@ export class LightSpell extends Entity {
       return;
     }
 
+    // Smooth fade out
+    // Keep full brightness for first 50%, then fade
+    const ratio = this.life / this.maxLife;
+    if (ratio < 0.5) {
+      this.lightRadius = 150 * (ratio * 2); // Linear fade from 150 to 0 over last half of life
+    } else {
+      this.lightRadius = 150;
+    }
   }
 
   draw(ctx: CanvasRenderingContext2D) {

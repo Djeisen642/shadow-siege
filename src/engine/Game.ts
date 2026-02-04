@@ -7,12 +7,22 @@ import { ResourceNode } from '../entities/ResourceNode';
 import { Castle } from '../entities/Castle';
 import { Entity } from '../entities/Entity';
 
+interface GameEffect {
+  type: string;
+  life: number;
+  color?: string;
+  sx?: number;
+  sy?: number;
+  ex?: number;
+  ey?: number;
+}
+
 export class Game {
   canvas: HTMLCanvasElement;
   renderer: Renderer;
   input: Input;
   entities: Entity[];
-  effects: any[]; // Define an interface for effects ideally
+  effects: GameEffect[];
   lastTime: number;
   isGameOver: boolean;
   resources: { gold: number; mana: number };
@@ -36,7 +46,7 @@ export class Game {
 
     this.resources = {
       gold: 250,
-      mana: 100
+      mana: 100,
     };
 
     this.uiGold = document.getElementById('gold-count');
@@ -55,9 +65,15 @@ export class Game {
   }
 
   setupUI() {
-    document.getElementById('btn-light')?.addEventListener('click', () => this.setActionMode('CAST_LIGHT'));
-    document.getElementById('btn-tower-melee')?.addEventListener('click', () => this.setActionMode('BUILD_MELEE'));
-    document.getElementById('btn-tower-ranged')?.addEventListener('click', () => this.setActionMode('BUILD_RANGED'));
+    document
+      .getElementById('btn-light')
+      ?.addEventListener('click', () => this.setActionMode('CAST_LIGHT'));
+    document
+      .getElementById('btn-tower-melee')
+      ?.addEventListener('click', () => this.setActionMode('BUILD_MELEE'));
+    document
+      .getElementById('btn-tower-ranged')
+      ?.addEventListener('click', () => this.setActionMode('BUILD_RANGED'));
 
     // Global key listener for ESC
     window.addEventListener('keydown', (e) => {
@@ -66,12 +82,13 @@ export class Game {
   }
 
   setActionMode(mode: string | null) {
-      this.ActionMode = mode;
-      document.querySelectorAll('.control-btn').forEach(b => b.classList.remove('active'));
-      
-      if (mode === 'CAST_LIGHT') document.getElementById('btn-light')?.classList.add('active');
-      if (mode === 'BUILD_MELEE') document.getElementById('btn-tower-melee')?.classList.add('active');
-      if (mode === 'BUILD_RANGED') document.getElementById('btn-tower-ranged')?.classList.add('active');
+    this.ActionMode = mode;
+    document.querySelectorAll('.control-btn').forEach((b) => b.classList.remove('active'));
+
+    if (mode === 'CAST_LIGHT') document.getElementById('btn-light')?.classList.add('active');
+    if (mode === 'BUILD_MELEE') document.getElementById('btn-tower-melee')?.classList.add('active');
+    if (mode === 'BUILD_RANGED')
+      document.getElementById('btn-tower-ranged')?.classList.add('active');
   }
 
   handleInput(type: string, data: any) {
@@ -118,7 +135,7 @@ export class Game {
 
   gameOver() {
     this.isGameOver = true;
-    alert("GAME OVER! The Shadow has consumed you.");
+    alert('GAME OVER! The Shadow has consumed you.');
     location.reload();
   }
 
@@ -154,8 +171,8 @@ export class Game {
     }
 
     // Clean dead entities
-    this.entities = this.entities.filter(e => !e.markedForDeletion);
-    this.effects = this.effects.filter(e => {
+    this.entities = this.entities.filter((e) => !e.markedForDeletion);
+    this.effects = this.effects.filter((e) => {
       e.life -= deltaTime;
       return e.life > 0;
     });
@@ -197,7 +214,14 @@ export class Game {
     const ctx = this.renderer.ctx;
     ctx.save();
     for (const effect of this.effects) {
-      if (effect.type === 'line') {
+      if (
+        effect.type === 'line' &&
+        effect.color &&
+        effect.sx !== undefined &&
+        effect.sy !== undefined &&
+        effect.ex !== undefined &&
+        effect.ey !== undefined
+      ) {
         ctx.strokeStyle = effect.color;
         ctx.lineWidth = 2;
         ctx.beginPath();

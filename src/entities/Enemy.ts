@@ -45,7 +45,7 @@ export class Enemy extends Entity {
     // Only draw if lit!
     const isLit = this.game.isPointLit(this.x, this.y);
 
-    // Debug: Draw invisible enemies as faint grey? 
+    // Debug: Draw invisible enemies as faint grey?
     // No, for "Shadow Siege" feeling, they should be INVISIBLE if not lit.
     // But for a web game, maybe a tiny hint or fully invisible.
 

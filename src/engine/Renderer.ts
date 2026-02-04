@@ -60,8 +60,12 @@ export class Renderer {
         this.lightCtx.beginPath();
         // Gradient for soft edges
         const g = this.lightCtx.createRadialGradient(
-          entity.x, entity.y, 0,
-          entity.x, entity.y, entity.lightRadius
+          entity.x,
+          entity.y,
+          0,
+          entity.x,
+          entity.y,
+          entity.lightRadius
         );
         g.addColorStop(0, 'rgba(0, 0, 0, 1)');
         g.addColorStop(1, 'rgba(0, 0, 0, 0)');
@@ -92,7 +96,7 @@ export class Renderer {
     // Check the alpha value of the light mask at this point
     // If alpha is high (dark), it's not lit. If alpha is low (transparent), it is lit.
     // Performance note: getImageData is slow. We might need optimization later (e.g., geometric checks).
-    // For now, let's stick to geometric checks for "Lit" status based on entities, 
+    // For now, let's stick to geometric checks for "Lit" status based on entities,
     // because reading pixels every frame for every enemy is too slow.
     return false; // Deprecated for direct geometric check in Game logic
   }
