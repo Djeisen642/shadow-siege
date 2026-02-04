@@ -46,8 +46,8 @@ export class Game {
     this.ActionMode = null;
 
     this.resources = {
-      gold: 250,
-      mana: 100,
+      gold: GAME_CONFIG.STARTING_GOLD,
+      mana: GAME_CONFIG.STARTING_MANA,
     };
 
     this.uiGold = document.getElementById('gold-count');
@@ -167,7 +167,7 @@ export class Game {
     }
 
     // Regen Mana
-    if (this.resources.mana < 100) {
+    if (this.resources.mana < GAME_CONFIG.MAX_MANA) {
       this.resources.mana += MANA_REGEN * deltaTime;
     }
 

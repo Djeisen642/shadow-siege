@@ -36,7 +36,7 @@ export class Enemy extends Entity {
       this.y += (dy / dist) * this.speed * deltaTime;
     } else {
       // Reached base - deal damage
-      this.game.castle.takeDamage(10);
+      this.game.castle.takeDamage(ENEMY_STATS.DAMAGE);
       this.markedForDeletion = true;
     }
   }

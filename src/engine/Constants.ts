@@ -48,8 +48,46 @@ export const SPAWN_RATES = {
 } as const;
 
 /**
+ * Base Game Configuration
+ */
+export const GAME_CONFIG = {
+  STARTING_GOLD: 250,
+  STARTING_MANA: 100,
+  MAX_MANA: 100,
+} as const;
+
+/**
+ * Entity Statistics and Properties
+ */
+export const CASTLE_STATS = {
+  RADIUS: 30,
+  LIGHT_RADIUS: 200,
+  HEALTH: 100,
+} as const;
+
+export const ENEMY_STATS = {
+  RADIUS: 10,
+  SPEED: 40, // Pixels per second
+  HEALTH: 30,
+  DAMAGE: 10, // Damage dealt to castle
+  VALUE: 10, // Gold reward
+} as const;
+
+export const RESOURCE_STATS = {
+  RADIUS: 12,
+  VALUE: 25, // Gold amount
+} as const;
+
+export const LIGHT_SPELL_STATS = {
+  DURATION: 10.0, // Seconds
+  MAX_RADIUS: 150,
+} as const;
+
+/**
  * Mana regenerated per second.
  */
+export const MANA_REGEN = 5;
+
 /**
  * Centralized color palette for the game.
  */
