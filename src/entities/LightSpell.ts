@@ -1,5 +1,6 @@
 import { Entity } from './Entity';
-import type { Game } from '../engine/Game';
+import { Game } from '../engine/Game';
+import { COLORS } from '../engine/Constants';
 
 export class LightSpell extends Entity {
   life: number;
@@ -7,31 +8,38 @@ export class LightSpell extends Entity {
 
   constructor(game: Game, x: number, y: number) {
     super(game, x, y);
-    this.lightRadius = 150;
-    this.life = 10.0; // Seconds
+    this.life = 10.0; // Lasts 10 seconds
     this.maxLife = 10.0;
+    this.lightRadius = 0; // Starts at 0, grows
+    this.color = COLORS.LIGHT_SPELL;
   }
 
   update(deltaTime: number) {
     this.life -= deltaTime;
     if (this.life <= 0) {
       this.markedForDeletion = true;
-      return;
     }
 
-    // Smooth fade out
-    // Keep full brightness for first 50%, then fade
-    const ratio = this.life / this.maxLife;
-    if (ratio < 0.5) {
-      this.lightRadius = 150 * (ratio * 2); // Linear fade from 150 to 0 over last half of life
+    // Animation: Grow fast, stay, then shrink
+    // Simple: Grow to max 150
+    const targetRadius = 150;
+
+    // Fade out logic
+    if (this.life < 5.0) {
+      // Shrink in last 5 seconds
+      this.lightRadius = targetRadius * (this.life / 5.0);
     } else {
-      this.lightRadius = 150;
+      // Grow / check stability
+      if (this.lightRadius < targetRadius) {
+        this.lightRadius += 500 * deltaTime; // Grow speed
+        if (this.lightRadius > targetRadius) this.lightRadius = targetRadius;
+      }
     }
   }
 
   draw(ctx: CanvasRenderingContext2D) {
     // Optional: Draw a small rune or orb at the center
-    ctx.fillStyle = '#fff';
+    ctx.fillStyle = this.color;
     ctx.beginPath();
     ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
     ctx.fill();

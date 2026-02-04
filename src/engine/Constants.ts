@@ -15,8 +15,8 @@ export type TowerType = 'MELEE' | 'RANGED';
  * - Mana is used for Spells.
  */
 export const COSTS = {
-  LIGHT_SPELL: 10,  // Mana cost
-  TOWER_MELEE: 50,  // Gold cost
+  LIGHT_SPELL: 10, // Mana cost
+  TOWER_MELEE: 50, // Gold cost
   TOWER_RANGED: 100, // Gold cost
 } as const;
 
@@ -28,13 +28,13 @@ export const COSTS = {
  */
 export const TOWER_STATS = {
   MELEE: {
-    RANGE: 60,      // Short range
-    DAMAGE: 20,     // High damage
+    RANGE: 60, // Short range
+    DAMAGE: 20, // High damage
     FIRE_RATE: 0.5, // Fast attack speed
   },
   RANGED: {
-    RANGE: 200,     // Long range
-    DAMAGE: 10,     // Lower damage
+    RANGE: 200, // Long range
+    DAMAGE: 10, // Lower damage
     FIRE_RATE: 1.5, // Slow attack speed
   },
 } as const;
@@ -43,11 +43,38 @@ export const TOWER_STATS = {
  * Timers for spawning events (in Seconds).
  */
 export const SPAWN_RATES = {
-  ENEMY: 3.0,     // Time between enemy spawns
-  RESOURCE: 5.0,  // Time between resource node spawns
+  ENEMY: 3.0, // Time between enemy spawns
+  RESOURCE: 5.0, // Time between resource node spawns
 } as const;
 
 /**
  * Mana regenerated per second.
  */
-export const MANA_REGEN = 5;
+/**
+ * Centralized color palette for the game.
+ */
+export const COLORS = {
+  BACKGROUND: '#222',
+  LIGHT_MASK: 'rgba(0, 0, 0, 0.95)',
+
+  // Entities
+  CASTLE: '#fff',
+  CASTLE_BASE: '#444',
+  ENEMY: '#f00',
+  TOWER_MELEE: '#44f',
+  TOWER_RANGED: '#4f4',
+  RESOURCE_NODE: '#d4af37',
+  RESOURCE_FLOAT: '#ffd700',
+  LIGHT_SPELL: '#fff',
+
+  // UI / Health
+  HEALTH_BAR_BG: 'red',
+  HEALTH_BAR_FG: 'lime',
+  HEALTH_BAR_ENEMY_FG: 'green',
+
+  // Effects
+  EFFECT_MELEE: 'cyan',
+  EFFECT_RANGED: 'yellow',
+  RANGE_RING: 'rgba(255, 255, 255, 0.6)',
+  LIGHT_RING: 'rgba(255, 255, 200, 0.1)',
+} as const;
