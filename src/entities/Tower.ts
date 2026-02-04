@@ -1,9 +1,10 @@
 import { Entity } from './Entity';
 import type { Game } from '../engine/Game';
 import type { Enemy } from './Enemy';
+import { TOWER_STATS, type TowerType } from '../engine/Constants';
 
 export class Tower extends Entity {
-  type: 'MELEE' | 'RANGED';
+  type: TowerType;
   radius: number;
   range: number;
   damage: number;
@@ -11,14 +12,16 @@ export class Tower extends Entity {
   fireRate: number;
   lightRadius: number;
 
-  constructor(game: Game, x: number, y: number, type: 'MELEE' | 'RANGED') {
+  constructor(game: Game, x: number, y: number, type: TowerType) {
     super(game, x, y);
-    this.type = type; // 'MELEE' or 'RANGED'
+    this.type = type;
     this.radius = 15;
-    this.range = type === 'MELEE' ? 60 : 200;
-    this.damage = type === 'MELEE' ? 20 : 10;
+
+    const stats = TOWER_STATS[type];
+    this.range = stats.RANGE;
+    this.damage = stats.DAMAGE;
+    this.fireRate = stats.FIRE_RATE;
     this.cooldown = 0;
-    this.fireRate = type === 'MELEE' ? 0.5 : 1.5; // Seconds between shots
 
     this.color = type === 'MELEE' ? '#44f' : '#4f4';
 

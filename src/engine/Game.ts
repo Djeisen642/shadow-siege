@@ -6,6 +6,7 @@ import { Tower } from '../entities/Tower';
 import { ResourceNode } from '../entities/ResourceNode';
 import { Castle } from '../entities/Castle';
 import { Entity } from '../entities/Entity';
+import { COSTS, MANA_REGEN, SPAWN_RATES, type ActionMode } from './Constants';
 
 interface GameEffect {
   type: string;
@@ -31,7 +32,7 @@ export class Game {
   castle: Castle;
   enemySpawnTimer: number;
   resourceSpawnTimer: number;
-  ActionMode: string | null;
+  ActionMode: ActionMode;
 
   constructor() {
     this.canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
@@ -81,7 +82,7 @@ export class Game {
     });
   }
 
-  setActionMode(mode: string | null) {
+  setActionMode(mode: ActionMode) {
     this.ActionMode = mode;
     document.querySelectorAll('.control-btn').forEach((b) => b.classList.remove('active'));
 
@@ -101,20 +102,20 @@ export class Game {
 
     if (type === 'mousedown') {
       if (this.ActionMode === 'CAST_LIGHT') {
-        if (this.resources.mana >= 10) {
-          this.resources.mana -= 10;
+        if (this.resources.mana >= COSTS.LIGHT_SPELL) {
+          this.resources.mana -= COSTS.LIGHT_SPELL;
           this.entities.push(new LightSpell(this, data.x, data.y));
           // PERSISTENT: Do NOT clear ActionMode
         }
       } else if (this.ActionMode === 'BUILD_MELEE') {
-        if (this.resources.gold >= 50) {
-          this.resources.gold -= 50;
+        if (this.resources.gold >= COSTS.TOWER_MELEE) {
+          this.resources.gold -= COSTS.TOWER_MELEE;
           this.entities.push(new Tower(this, data.x, data.y, 'MELEE'));
           // PERSISTENT
         }
       } else if (this.ActionMode === 'BUILD_RANGED') {
-        if (this.resources.gold >= 100) {
-          this.resources.gold -= 100;
+        if (this.resources.gold >= COSTS.TOWER_RANGED) {
+          this.resources.gold -= COSTS.TOWER_RANGED;
           this.entities.push(new Tower(this, data.x, data.y, 'RANGED'));
           // PERSISTENT
         }
@@ -156,18 +157,18 @@ export class Game {
     this.enemySpawnTimer -= deltaTime;
     if (this.enemySpawnTimer <= 0) {
       this.spawnEnemy();
-      this.enemySpawnTimer = 3.0; // Every 3 seconds
+      this.enemySpawnTimer = SPAWN_RATES.ENEMY;
     }
 
     this.resourceSpawnTimer -= deltaTime;
     if (this.resourceSpawnTimer <= 0) {
       this.spawnResource();
-      this.resourceSpawnTimer = 5.0; // Every 5 seconds
+      this.resourceSpawnTimer = SPAWN_RATES.RESOURCE;
     }
 
     // Regen Mana
     if (this.resources.mana < 100) {
-      this.resources.mana += 5 * deltaTime;
+      this.resources.mana += MANA_REGEN * deltaTime;
     }
 
     // Clean dead entities
