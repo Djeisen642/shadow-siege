@@ -1,6 +1,6 @@
 import type { Game } from '../engine/Game';
 
-export class Entity {
+export abstract class Entity {
   game: Game;
   x: number;
   y: number;
@@ -22,11 +22,7 @@ export class Entity {
   // Optional methods for duck typing
   drawOverlay?(ctx: CanvasRenderingContext2D): void;
 
-  update(_deltaTime: number) {
-    // Override me
-  }
+  abstract update(deltaTime: number): void;
 
-  draw(_ctx: CanvasRenderingContext2D) {
-    // Override me
-  }
+  abstract draw(ctx: CanvasRenderingContext2D): void;
 }

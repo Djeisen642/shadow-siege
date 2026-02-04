@@ -23,6 +23,10 @@ export class Castle extends Entity {
     }
   }
 
+  update(_deltaTime: number) {
+    // Castle doesn't move, but could regenerate health here
+  }
+
   draw(ctx: CanvasRenderingContext2D) {
     // Draw Base
     ctx.fillStyle = '#444';
