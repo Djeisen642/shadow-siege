@@ -1,8 +1,13 @@
-import { Game } from './engine/Game.js';
+import { Game } from './engine/Game';
+
+declare global {
+  interface Window {
+    game: Game;
+  }
+}
 
 window.addEventListener('DOMContentLoaded', () => {
   const game = new Game();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (window as any).game = game; // Debug access
+  window.game = game; // Debug access
   console.log('Shadow Siege Engine Started');
 });
