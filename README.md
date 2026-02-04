@@ -2,6 +2,8 @@
 
 A fantasy tower defense game built with **TypeScript** and **Vite**, focusing on lighting mechanics and survival. Powered by the **Bun** runtime.
 
+**[🎮 Play Now](https://djeisen642.github.io/shadow-siege/)**
+
 ## 🎮 How to Play
 
 The world is consumed by darkness. You must defend your Castle against the relentless siege.
