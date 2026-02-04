@@ -1,5 +1,5 @@
 import { Renderer } from './Renderer';
-import { Input } from './Input';
+import { Input, type MousePos } from './Input';
 import { LightSpell } from '../entities/LightSpell';
 import { Enemy } from '../entities/Enemy';
 import { Tower } from '../entities/Tower';
@@ -91,7 +91,7 @@ export class Game {
       document.getElementById('btn-tower-ranged')?.classList.add('active');
   }
 
-  handleInput(type: string, data: any) {
+  handleInput(type: string, data: MousePos) {
     if (this.isGameOver) return;
 
     if (type === 'contextmenu') {

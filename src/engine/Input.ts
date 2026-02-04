@@ -1,8 +1,13 @@
+export interface MousePos {
+  x: number;
+  y: number;
+}
+
 export class Input {
   canvas: HTMLCanvasElement;
-  mouse: { x: number; y: number };
+  mouse: MousePos;
   isMouseDown: boolean;
-  listeners: Array<(type: string, data: any) => void>;
+  listeners: Array<(type: string, data: MousePos) => void>;
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
@@ -42,7 +47,7 @@ export class Input {
     this.isMouseDown = false;
   }
 
-  addListener(fn: (type: string, data: any) => void) {
+  addListener(fn: (type: string, data: MousePos) => void) {
     this.listeners.push(fn);
   }
 }
