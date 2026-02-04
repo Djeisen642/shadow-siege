@@ -28,3 +28,5 @@
     - [x] Particle effects (Resource Float)
     - [ ] Sound/Audio (Skipped)
     - [x] Cleanup (Removed empty folders and unused files)
+- [x] Refactoring
+    - [x] Migrate to TypeScript

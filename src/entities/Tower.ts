@@ -1,7 +1,17 @@
-import { Entity } from './Entity.js';
+import { Entity } from './Entity';
+import type { Game } from '../engine/Game';
+import type { Enemy } from './Enemy';
 
 export class Tower extends Entity {
-  constructor(game, x, y, type) {
+  type: 'MELEE' | 'RANGED';
+  radius: number;
+  range: number;
+  damage: number;
+  cooldown: number;
+  fireRate: number;
+  lightRadius: number;
+
+  constructor(game: Game, x: number, y: number, type: 'MELEE' | 'RANGED') {
     super(game, x, y);
     this.type = type; // 'MELEE' or 'RANGED'
     this.radius = 15;
@@ -17,7 +27,7 @@ export class Tower extends Entity {
     this.lightRadius = 40;
   }
 
-  update(deltaTime) {
+  update(deltaTime: number) {
     this.cooldown -= deltaTime;
 
     if (this.cooldown <= 0) {
@@ -30,10 +40,10 @@ export class Tower extends Entity {
     }
   }
 
-  findTarget() {
+  findTarget(): Enemy | null {
     // Brute force search (optimize with spatial hash later if needed)
     let bestDist = this.range * this.range;
-    let bestTarget = null;
+    let bestTarget: Enemy | null = null;
 
     for (const entity of this.game.entities) {
       // Check if it's an enemy (duck typing or check constructor name)
@@ -56,14 +66,14 @@ export class Tower extends Entity {
 
         if (distSq < bestDist) {
           bestDist = distSq;
-          bestTarget = entity;
+          bestTarget = entity as Enemy;
         }
       }
     }
     return bestTarget;
   }
 
-  fire(target) {
+  fire(target: Enemy) {
     // Instant hit for melee, Projectile for Ranged?
     // Simplified: Instant hit for now, draw a line.
     target.health -= this.damage;
@@ -78,7 +88,7 @@ export class Tower extends Entity {
     });
   }
 
-  draw(ctx) {
+  draw(ctx: CanvasRenderingContext2D) {
     ctx.fillStyle = this.color;
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
@@ -95,7 +105,7 @@ export class Tower extends Entity {
     }
   }
 
-  drawOverlay(ctx) {
+  drawOverlay(ctx: CanvasRenderingContext2D) {
     // Range Ring - visible on top of darkness
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)'; // Brighter
     ctx.lineWidth = 2; // Thicker

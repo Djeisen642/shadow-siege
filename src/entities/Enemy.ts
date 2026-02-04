@@ -1,7 +1,13 @@
-import { Entity } from './Entity.js';
+import { Entity } from './Entity';
+import type { Game } from '../engine/Game';
 
 export class Enemy extends Entity {
-  constructor(game, x, y) {
+  speed: number;
+  health: number;
+  value: number;
+  targetBase: { x: number; y: number };
+
+  constructor(game: Game, x: number, y: number) {
     super(game, x, y);
     this.speed = 30; // pixels per second
     this.health = 30;
@@ -11,7 +17,7 @@ export class Enemy extends Entity {
     this.targetBase = { x: game.renderer.width / 2, y: game.renderer.height / 2 };
   }
 
-  update(deltaTime) {
+  update(deltaTime: number) {
     if (this.health <= 0) {
       this.markedForDeletion = true;
       this.game.resources.gold += this.value;
@@ -35,7 +41,7 @@ export class Enemy extends Entity {
     }
   }
 
-  draw(ctx) {
+  draw(ctx: CanvasRenderingContext2D) {
     // Only draw if lit!
     const isLit = this.game.isPointLit(this.x, this.y);
 

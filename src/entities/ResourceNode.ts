@@ -1,7 +1,14 @@
-import { Entity } from './Entity.js';
+import { Entity } from './Entity';
+import type { Game } from '../engine/Game';
 
 export class ResourceNode extends Entity {
-  constructor(game, x, y) {
+  value: number;
+  type: string;
+  isCollected: boolean;
+  animAlpha: number;
+  animY: number;
+
+  constructor(game: Game, x: number, y: number) {
     super(game, x, y);
     this.radius = 12;
     this.value = 25; // Gold
@@ -14,7 +21,7 @@ export class ResourceNode extends Entity {
     this.animY = 0;
   }
 
-  update(deltaTime) {
+  update(deltaTime: number) {
     if (this.markedForDeletion) return;
 
     // Auto-collection logic
@@ -35,7 +42,7 @@ export class ResourceNode extends Entity {
     }
   }
 
-  draw(ctx) {
+  draw(ctx: CanvasRenderingContext2D) {
     if (this.isCollected) {
       ctx.globalAlpha = Math.max(0, this.animAlpha);
       ctx.fillStyle = this.color;
@@ -47,8 +54,8 @@ export class ResourceNode extends Entity {
       ctx.fill();
       ctx.globalAlpha = 1.0;
     } else if (this.game.isPointLit(this.x, this.y)) {
-      // Should technically auto-collect instantly if lit, 
-      // so this frame might be skipped logic-wise, 
+      // Should technically auto-collect instantly if lit,
+      // so this frame might be skipped logic-wise,
       // but good fallback.
       ctx.fillStyle = this.color;
       ctx.beginPath();
@@ -60,7 +67,7 @@ export class ResourceNode extends Entity {
     }
   }
 
-  drawOverlay(ctx) {
+  drawOverlay(ctx: CanvasRenderingContext2D) {
     if (this.isCollected) {
       ctx.save();
       ctx.globalAlpha = Math.max(0, this.animAlpha);
@@ -71,7 +78,7 @@ export class ResourceNode extends Entity {
     }
   }
 
-  checkClick(x, y) {
+  checkClick(_x: number, _y: number) {
     return false;
   }
 }

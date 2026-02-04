@@ -1,13 +1,22 @@
+import { Entity } from '../entities/Entity';
+
 export class Renderer {
-  constructor(canvas) {
+  canvas: HTMLCanvasElement;
+  ctx: CanvasRenderingContext2D;
+  width: number;
+  height: number;
+  lightCanvas: HTMLCanvasElement;
+  lightCtx: CanvasRenderingContext2D;
+
+  constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
-    this.ctx = canvas.getContext('2d');
+    this.ctx = canvas.getContext('2d')!;
     this.width = canvas.width;
     this.height = canvas.height;
 
     // Light mask canvas
     this.lightCanvas = document.createElement('canvas');
-    this.lightCtx = this.lightCanvas.getContext('2d');
+    this.lightCtx = this.lightCanvas.getContext('2d')!;
 
     this.resize();
     window.addEventListener('resize', () => this.resize());
@@ -28,7 +37,7 @@ export class Renderer {
     this.ctx.fillRect(0, 0, this.width, this.height);
   }
 
-  drawEntities(entities) {
+  drawEntities(entities: Entity[]) {
     // Sort by z-index or type if needed
     for (const entity of entities) {
       this.ctx.save();
@@ -37,7 +46,7 @@ export class Renderer {
     }
   }
 
-  drawLighting(entities) {
+  drawLighting(entities: Entity[]) {
     // 1. Fill the light mask with darkness (Fog of War)
     this.lightCtx.globalCompositeOperation = 'source-over';
     this.lightCtx.fillStyle = 'rgba(0, 0, 0, 0.95)'; // Very dark
@@ -69,17 +78,17 @@ export class Renderer {
     this.ctx.restore();
   }
 
-  drawOverlays(entities) {
+  drawOverlays(entities: Entity[]) {
     for (const entity of entities) {
       if (entity.drawOverlay) {
         this.ctx.save();
-        entity.drawOverlay(this.ctx);
+        entity.drawOverlay!(this.ctx);
         this.ctx.restore();
       }
     }
   }
 
-  isPointLit(x, y) {
+  isPointLit(_x: number, _y: number) {
     // Check the alpha value of the light mask at this point
     // If alpha is high (dark), it's not lit. If alpha is low (transparent), it is lit.
     // Performance note: getImageData is slow. We might need optimization later (e.g., geometric checks).

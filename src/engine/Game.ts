@@ -1,52 +1,63 @@
-import { Renderer } from './Renderer.js';
-import { Input } from './Input.js';
-import { LightSpell } from '../entities/LightSpell.js';
-import { Enemy } from '../entities/Enemy.js';
-import { Tower } from '../entities/Tower.js';
-import { ResourceNode } from '../entities/ResourceNode.js';
-import { Castle } from '../entities/Castle.js';
+import { Renderer } from './Renderer';
+import { Input } from './Input';
+import { LightSpell } from '../entities/LightSpell';
+import { Enemy } from '../entities/Enemy';
+import { Tower } from '../entities/Tower';
+import { ResourceNode } from '../entities/ResourceNode';
+import { Castle } from '../entities/Castle';
+import { Entity } from '../entities/Entity';
 
 export class Game {
+  canvas: HTMLCanvasElement;
+  renderer: Renderer;
+  input: Input;
+  entities: Entity[];
+  effects: any[]; // Define an interface for effects ideally
+  lastTime: number;
+  isGameOver: boolean;
+  resources: { gold: number; mana: number };
+  uiGold: HTMLElement | null;
+  uiMana: HTMLElement | null;
+  castle: Castle;
+  enemySpawnTimer: number;
+  resourceSpawnTimer: number;
+  ActionMode: string | null;
+
   constructor() {
-    this.canvas = document.getElementById('gameCanvas');
+    this.canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
     this.renderer = new Renderer(this.canvas);
     this.input = new Input(this.canvas);
 
     this.entities = [];
-    this.effects = []; // Visual effects (lines, explosions)
+    this.effects = [];
     this.lastTime = 0;
     this.isGameOver = false;
+    this.ActionMode = null;
 
     this.resources = {
-      gold: 250, // Starter gold
+      gold: 250,
       mana: 100
     };
 
-    // UI Cache
     this.uiGold = document.getElementById('gold-count');
     this.uiMana = document.getElementById('mana-count');
 
-    // Create Castle - center of map (once renderer size set)
-    // Note: Renderer resizes on init.
     this.castle = new Castle(this, this.renderer.width / 2, this.renderer.height / 2);
     this.entities.push(this.castle);
 
-    // Input Listeners
     this.input.addListener((type, data) => this.handleInput(type, data));
     this.setupUI();
 
-    // Spawners
     this.enemySpawnTimer = 0;
     this.resourceSpawnTimer = 0;
 
-    // Start loop
     requestAnimationFrame((ts) => this.loop(ts));
   }
 
   setupUI() {
-    document.getElementById('btn-light').addEventListener('click', () => this.setActionMode('CAST_LIGHT'));
-    document.getElementById('btn-tower-melee').addEventListener('click', () => this.setActionMode('BUILD_MELEE'));
-    document.getElementById('btn-tower-ranged').addEventListener('click', () => this.setActionMode('BUILD_RANGED'));
+    document.getElementById('btn-light')?.addEventListener('click', () => this.setActionMode('CAST_LIGHT'));
+    document.getElementById('btn-tower-melee')?.addEventListener('click', () => this.setActionMode('BUILD_MELEE'));
+    document.getElementById('btn-tower-ranged')?.addEventListener('click', () => this.setActionMode('BUILD_RANGED'));
 
     // Global key listener for ESC
     window.addEventListener('keydown', (e) => {
@@ -54,16 +65,16 @@ export class Game {
     });
   }
 
-  setActionMode(mode) {
-    this.ActionMode = mode;
-    document.querySelectorAll('.control-btn').forEach(b => b.classList.remove('active'));
-
-    if (mode === 'CAST_LIGHT') document.getElementById('btn-light').classList.add('active');
-    if (mode === 'BUILD_MELEE') document.getElementById('btn-tower-melee').classList.add('active');
-    if (mode === 'BUILD_RANGED') document.getElementById('btn-tower-ranged').classList.add('active');
+  setActionMode(mode: string | null) {
+      this.ActionMode = mode;
+      document.querySelectorAll('.control-btn').forEach(b => b.classList.remove('active'));
+      
+      if (mode === 'CAST_LIGHT') document.getElementById('btn-light')?.classList.add('active');
+      if (mode === 'BUILD_MELEE') document.getElementById('btn-tower-melee')?.classList.add('active');
+      if (mode === 'BUILD_RANGED') document.getElementById('btn-tower-ranged')?.classList.add('active');
   }
 
-  handleInput(type, data) {
+  handleInput(type: string, data: any) {
     if (this.isGameOver) return;
 
     if (type === 'contextmenu') {
@@ -111,7 +122,7 @@ export class Game {
     location.reload();
   }
 
-  loop(timestamp) {
+  loop(timestamp: number) {
     const deltaTime = Math.min((timestamp - this.lastTime) / 1000, 0.1); // Cap dt
     this.lastTime = timestamp;
 
@@ -123,7 +134,7 @@ export class Game {
     requestAnimationFrame((ts) => this.loop(ts));
   }
 
-  update(deltaTime) {
+  update(deltaTime: number) {
     // Spawning Logic
     this.enemySpawnTimer -= deltaTime;
     if (this.enemySpawnTimer <= 0) {
@@ -155,8 +166,8 @@ export class Game {
     }
 
     // Update UI
-    this.uiGold.textContent = Math.floor(this.resources.gold);
-    this.uiMana.textContent = Math.floor(this.resources.mana);
+    if (this.uiGold) this.uiGold.textContent = Math.floor(this.resources.gold).toString();
+    if (this.uiMana) this.uiMana.textContent = Math.floor(this.resources.mana).toString();
   }
 
   spawnEnemy() {
@@ -202,7 +213,7 @@ export class Game {
   }
 
   // Geometric check for lighting
-  isPointLit(x, y) {
+  isPointLit(x: number, y: number) {
     for (const entity of this.entities) {
       if (entity.lightRadius > 0) {
         const dx = x - entity.x;

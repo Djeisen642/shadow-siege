@@ -1,7 +1,11 @@
-import { Entity } from './Entity.js';
+import { Entity } from './Entity';
+import type { Game } from '../engine/Game';
 
 export class Castle extends Entity {
-  constructor(game, x, y) {
+  health: number;
+  maxHealth: number;
+
+  constructor(game: Game, x: number, y: number) {
     super(game, x, y);
     this.radius = 30;
     this.health = 100;
@@ -11,7 +15,7 @@ export class Castle extends Entity {
     this.lightRadius = 80;
   }
 
-  takeDamage(amount) {
+  takeDamage(amount: number) {
     this.health -= amount;
     // Visual shake or flash could go here
     if (this.health <= 0) {
@@ -19,7 +23,7 @@ export class Castle extends Entity {
     }
   }
 
-  draw(ctx) {
+  draw(ctx: CanvasRenderingContext2D) {
     // Draw Base
     ctx.fillStyle = '#444';
     ctx.beginPath();
