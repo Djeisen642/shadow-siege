@@ -11,13 +11,17 @@ export class Renderer {
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
-    this.ctx = canvas.getContext('2d')!;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) throw new Error('Could not get 2D context from canvas');
+    this.ctx = ctx;
     this.width = canvas.width;
     this.height = canvas.height;
 
     // Light mask canvas
     this.lightCanvas = document.createElement('canvas');
-    this.lightCtx = this.lightCanvas.getContext('2d')!;
+    const lightCtx = this.lightCanvas.getContext('2d');
+    if (!lightCtx) throw new Error('Could not get 2D context from light canvas');
+    this.lightCtx = lightCtx;
 
     this.resize();
     window.addEventListener('resize', () => this.resize());

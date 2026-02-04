@@ -21,6 +21,7 @@ This document serves as a reference for the development patterns, architectural 
 
 - **Avoid `any`**. Use strictly defined interfaces and Types.
 - **Global Augmentation**: `window.game` is typed in `src/main.ts` for debugging. Do not cast `window as any`.
+- **Avoid Non-Null Assertions (`!`)**. Do not use `!` to bypass null checks. Instead, verify existence and throw meaningful errors if needed.
 
 ### Linting & Formatting
 
